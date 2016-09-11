@@ -3,7 +3,7 @@ Prédiction des hospitalisations futures de patients atteints d'une pathologie d
 
 # Contexte
 
-Cette application a été créée dans le cadre d'un travail de recherche au LIRMM, au sein de l'équipe ADVANSE, en collaboration avec le CHU de Nîmes.
+Cette application en C a été créée dans le cadre d'un travail de recherche au LIRMM, au sein de l'équipe ADVANSE, en collaboration avec le CHU de Nîmes.
 
 ### Collaborateurs
 
@@ -90,6 +90,11 @@ La prédiction se base sur les suites hospitalières des patients dont le motif 
 L'application ne détermine donc pas avec exactitude l'hospitalisation future de p1, mais analyse statistiquement les suites hospitalières des patients qui présentent une similitude avec lui.
 Il est possible que p1 ne présente pas de suite hospitalière. Ce cas de figure n'est pas pris en compte dans notre application.
 
+### Documentation
+
+Le code a été documenté avec Doxygen. 
+La documentation au format pdf et HTML sont fournies.
+
 ### Utilisation
 
 Pour utiliser l'application, veuillez télécharger le code.
@@ -113,3 +118,5 @@ Les résultats sont enregistrés dans le fichier predictions.txt du dossier resu
 ```
 prédiction:probabilité
 ```
+
+Chaque ligne du fichier correspond à une prédiction.
