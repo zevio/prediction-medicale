@@ -15,6 +15,7 @@
 
 #include "contextemedical.h"
 
+
 int conversionchar(char a){
 	char temp[2];
 	int aint; // entier correspondant au caractere 'a'

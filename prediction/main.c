@@ -18,6 +18,7 @@
 #include "prediction.h"
 #include "predictionpartielle.h"
 
+
 int main(int argc, char *argv[]) {	
 	char *motif=creermotif(argc, argv); // permet de recuperer le motif du patient passe en parametre du programme
 	if (motif != NULL) {
@@ -30,6 +31,7 @@ int main(int argc, char *argv[]) {
 		int i = prediction(contexte, motif); // prediction sur le motif du patient : on recupere le nombre d'occurrences du motif du patient dans la base sequentielle 
 		if(i==0) { // si le motif du patient n'existe pas dans la base sequentielle
 			printf("Aucune correspondance complete n'a ete trouvee. Une prediction partielle va etre realisee.\n");
+			predictionpartielle(contexte,motif); // on realise une prediction partielle
 		}
 	}
 }

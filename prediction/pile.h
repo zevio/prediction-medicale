@@ -14,6 +14,7 @@
 
 /**
  * \struct Pile
+ * \brief Pile contenant les predictions
  */
 typedef struct pile {
 	int valeur;

@@ -65,11 +65,11 @@ int score(int contexte, char* motif){
 	FILE* fichier = NULL;
 	fichier = fopen("base/base.txt", "r+"); // ouverture du fichier contenant la base sequentielle
 	if (fichier != NULL) {
+		printf("***** Calcul du score du motif %s *****\n", motif);
 		char ligne[128]; // taille max d'une ligne
 		int* tmotif=conversionmotif(motif); // conversion du motif en entree en tableau d'entiers
 		int taillem = strlen(motif); // taille du motif
 		int taillemotif=((taillem+1)/2); // taille du tableau tmotif
-		printf("taille motif : %i\n", taillemotif);
 		while((s=fgets(ligne,sizeof ligne,fichier)) != NULL ) { // lecture d'une ligne
 			if(s[0]=='c' && cptmotif!=0){ // cas ou on a fini de lire les motifs du contexte
 				break;
@@ -131,7 +131,7 @@ int prediction(int contexte, char* motif) {
 		printf("Score du motif du patient : %d\n",scorep);
 		pile *listePredictions = NULL; // contient la liste des evenements predits (tous les evenements dans le motif courant de la base sequentielle qui se produisent apres la premiere occurrence du motif du patient)
 		FILE* ecriture = NULL;
-		ecriture = fopen("resultats/predictions.txt","w+"); 
+		ecriture = fopen("resultats/predictions.txt","w+"); // fichier dans lequel on va ecrire les preditions et leur probabilite associee
 		while ((s= fgets(ligne, sizeof ligne, fichier))!= NULL) { // lecture d'une ligne 
 			if(s[0]=='c' && cptmotif!=0){ // cas ou on a fini de lire les motifs du bon contexte medical
 				break;
@@ -153,7 +153,8 @@ int prediction(int contexte, char* motif) {
 					for(j=indice;j<taillecourant;j++){
 						if(tmotif[i]==motiftemp[j]){ 
 							correspondance++; // calcul des correspondances entre le motif courant et le motif du patient
-							indice=j;
+							indice=j+1;
+							break;
 						}
 					}
 				}
