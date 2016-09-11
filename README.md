@@ -105,3 +105,11 @@ Pour exécuter, veuillez utiliser la commande suivante :
 ```
 ./prediction contexte motif
 ```
+
+### Résultats
+
+Les résultats sont enregistrés dans le fichier predictions.txt du dossier resultats, sous la forme suivante :
+
+```
+prédiction:probabilité
+```
