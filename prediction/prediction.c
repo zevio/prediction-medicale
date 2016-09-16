@@ -162,8 +162,8 @@ int prediction(int contexte, char* motif) {
 					correspond=1; // le motif courant correspond
 					motifscorrespondants++; // le nombre de motifs correspondant au motif du patient dans la base sequentielle augmente
 				}
-				if((correspond==1) && (indice!=-1) && (taillecourant>indice+1)){ // si le motif courant contient le motif du patient et qu'une prediction est possible (au moins un autre evenement a eu lieu a la suite du motif du patient)
-					for(i=indice+1; i<taillecourant;i++){
+				if((correspond==1) && (indice!=-1) && (taillecourant>indice)){ // si le motif courant contient le motif du patient et qu'une prediction est possible (au moins un autre evenement a eu lieu a la suite du motif du patient)
+					for(i=indice; i<taillecourant;i++){
 						prediction=motiftemp[i]; // on recupere chacun des evenements ayant eu lieu a la suite de la correspondance avec le motif du patient dans le motif courant : chaque evenement ayant eu lieu est une prediction
 						printf("Prediction : %d\n",prediction);
 						if(!existe(listePredictions,prediction)) { // si la prediction n'est pas deja dans la liste des predictions possibles

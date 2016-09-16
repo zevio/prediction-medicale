@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
 			motif=limitermotif(motif); // on limite le motif aux trois dernieres hospitalisations du patient
 			printf("La prediction porte sur le motif suivant : %s\n", motif);
 		}
-		int i = prediction(contexte, motif); // prediction sur le motif du patient : on recupere le nombre d'occurrences du motif du patient dans la base sequentielle 
+		int i = prediction(contexte, motif); // prediction sur le motif du patient : on recupere le nombre d'occurrences du motif du patient dans la base sequentielle
 		if(i==0) { // si le motif du patient n'existe pas dans la base sequentielle
 			printf("Aucune correspondance complete n'a ete trouvee. Une prediction partielle va etre realisee.\n");
 			predictionpartielle(contexte,motif); // on realise une prediction partielle
