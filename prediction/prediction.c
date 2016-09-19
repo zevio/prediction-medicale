@@ -117,9 +117,10 @@ int prediction(int contexte, char* motif) {
 	char* s; // la ligne lue 
 	int cptcontexte=-1; // un compteur pour le contexte
 	int cptmotif=0; // un compteur pour le nombre de motifs correspondant au contexte
+	int prediction_possible=0;
 	int i=0;
 	int j=0;
-	int motifscorrespondants=0; // nombre de motifs de la base qui contiennent l'integralite du motif du patient
+	int motif_correspondants = 0;
 	FILE* fichier = NULL; 
 	fichier = fopen("base/base.txt", "r+"); // ouverture du fichier contenant les donnees 
 	if (fichier != NULL) {
@@ -130,8 +131,16 @@ int prediction(int contexte, char* motif) {
 		int scorep=score(contexte,motif); // calcul du score du motif du patient
 		printf("Score du motif du patient : %d\n",scorep);
 		pile *listePredictions = NULL; // contient la liste des evenements predits (tous les evenements dans le motif courant de la base sequentielle qui se produisent apres la premiere occurrence du motif du patient)
-		FILE* ecriture = NULL;
-		ecriture = fopen("resultats/predictions.txt","w+"); // fichier dans lequel on va ecrire les preditions et leur probabilite associee
+		FILE* ecriture = NULL; // fichier dans lequel on va ecrire les predictions et leur probabilite associee
+		char* debut_nom_fichier = "resultats/predictions_"; // debut du nom du fichier (arborescence)
+		char* ctxt = conversionint(contexte);
+		char* extension = ".txt"; // extension txt
+		char* nom_fichier = (char*)calloc(strlen(debut_nom_fichier)+strlen(extension)+strlen(motif)+strlen(ctxt), sizeof(char)); // allocation memoire du nom du fichier
+		strcpy(nom_fichier,debut_nom_fichier); // ajout du debut du nom du fichier
+		strcat(nom_fichier,ctxt); // copie du contexte dans le nom du fichier
+		strcat(nom_fichier,motif); // copie du motif dans le nom du fichier
+		strcat(nom_fichier,extension); // ajout de l'extension dans le nom du fichier
+		ecriture = fopen(nom_fichier,"w+"); // ouverture en ecriture du fichier dans lequel on va ecrire les predictions et leur probabilite associee
 		while ((s= fgets(ligne, sizeof ligne, fichier))!= NULL) { // lecture d'une ligne 
 			if(s[0]=='c' && cptmotif!=0){ // cas ou on a fini de lire les motifs du bon contexte medical
 				break;
@@ -160,18 +169,23 @@ int prediction(int contexte, char* motif) {
 				}
 				if(correspondance==taillepatient){ // si le motif courant contient le motif du patient
 					correspond=1; // le motif courant correspond
-					motifscorrespondants++; // le nombre de motifs correspondant au motif du patient dans la base sequentielle augmente
+					motif_correspondants++;
 				}
 				if((correspond==1) && (indice!=-1) && (taillecourant>indice)){ // si le motif courant contient le motif du patient et qu'une prediction est possible (au moins un autre evenement a eu lieu a la suite du motif du patient)
+					printf("Prediction sur le motif %s\n", ligne);
 					for(i=indice; i<taillecourant;i++){
+						printf("Prediction a la place %d\n", i);
 						prediction=motiftemp[i]; // on recupere chacun des evenements ayant eu lieu a la suite de la correspondance avec le motif du patient dans le motif courant : chaque evenement ayant eu lieu est une prediction
 						printf("Prediction : %d\n",prediction);
 						if(!existe(listePredictions,prediction)) { // si la prediction n'est pas deja dans la liste des predictions possibles
-							empiler(&listePredictions, prediction); // on l'ajoute
+							empiler(&listePredictions,prediction); // on l'ajoute
 						}
 					}
 				}
 			}
+		}
+		if(!estvide(&listePredictions)){ // si on a trouve au moins une prediction
+			prediction_possible=1; // une prediction au moins est possible : il existait une correspondance du motif du patient dans la base, et cette correspondance etait suivie d'au moins une hospitalisation qu'on pourra predire
 		}
 		while(!estvide(&listePredictions)){ // tant qu'il existe encore des predictions possibles
 			int pred = depiler(&listePredictions); // on en traite une
@@ -190,5 +204,5 @@ int prediction(int contexte, char* motif) {
 		exit(1);
 	} 
 	fclose(fichier); // fermeture de la base sequentielle
-	return motifscorrespondants; // le nombre d'occurrences du motif du patient dans la base sequentielle
+	return prediction_possible; // 1 si au moins une prediction est possible, 0 sinon
 }

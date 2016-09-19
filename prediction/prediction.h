@@ -51,7 +51,7 @@ int score(int contexte, char* motif);
  * \brief Fonction de prediction pour un motif dans un contexte. Les predictions sont stockees dans un fichier prediction.txt
  * \param contexte - le contexte medical considere
  * \param motif - le motif sur lequel on veut realiser la prediction
- * \return motifscorrespondants - le nombre de motifs de la base qui contiennent l'integralite du motif du patient. Si le motif est 1 2 3 et que la base sequentielle contient le motif 1 4 2 3, il fera partie des motifs correspondants 
+ * \return prediction_possible - 1 si au moins une prediction est possible sur le motif, 0 sinon
  */
 int prediction(int contexte, char* motif);
 

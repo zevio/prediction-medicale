@@ -63,8 +63,6 @@ pile* remplirListePredictions2(int contexte, char* motif){
 		int* tmotif=conversionmotif(motif); // conversion du motif passe en parametre en tableau d'entiers 
 		int taillemotif = strlen(motif); // taille du motif 
 		int taillepatient=((taillemotif+1)/2); // taille du tableau d'entiers correspondant au motif
-		FILE* ecriture = NULL;
-		ecriture = fopen("resultats/predictions.txt","w+"); // fichier dans lequel on va ecrire les predictions et leur probabilite associee
 		while ((s= fgets(ligne, sizeof ligne, fichier))!= NULL) { // lecture d'une ligne 
 			if(s[0]=='c' && cptmotif!=0){ // cas ou on a fini de lire les motifs du bon contexte medical
 				break;
@@ -104,7 +102,6 @@ pile* remplirListePredictions2(int contexte, char* motif){
 				}
 			}
 		}
-		fclose(ecriture); // fermeture du fichier dans lequel on ecrit
 	}
 	else {
 		fprintf(stderr, "La base sequentielle est introuvable. Veuillez verifier que base.txt existe dans le dossier base.\n");
@@ -151,8 +148,6 @@ pile* remplirListePredictions1(int contexte,char* evenement_1, char* evenement_2
 	int* ev3 = conversionmotif(evenement_3); // troisieme hospitalisation
 	if (fichier != NULL) {
 		char ligne [ 128 ]; // taille max d'une ligne
-		FILE* ecriture = NULL;
-		ecriture = fopen("resultats/predictions.txt","w+"); // fichier dans lequel on va ecrire les predictions et leur probabilite associee
 		while ((s= fgets(ligne, sizeof ligne, fichier))!= NULL) { // lecture d'une ligne 
 			if(s[0]=='c' && cptmotif!=0){ // cas ou on a fini de lire les motifs du bon contexte medical
 				break;
@@ -188,7 +183,6 @@ pile* remplirListePredictions1(int contexte,char* evenement_1, char* evenement_2
 				}
 			}
 		}
-		fclose(ecriture); // fermeture du fichier dans lequel on ecrit
 	}
 	else {
 		fprintf(stderr, "La base sequentielle est introuvable. Veuillez verifier que base.txt existe dans le dossier base.\n");
@@ -245,7 +239,15 @@ void predictionpartielle(int contexte, char* motif) {
 	int score_max = scoremax(contexte, motif_1, motif_2, motif_3); // score maximum
 	int correspondance = 0; // verifie si une prediction est possible
 	FILE* ecriture = NULL;
-	ecriture = fopen("resultats/predictions.txt","w+"); // fichier dans lequel on va ecrire les preditions et leur probabilite associee 
+	char* debut_nom_fichier = "resultats/predictions_"; // debut du nom du fichier (arborescence)
+	char* ctxt = conversionint(contexte);
+	char* extension = ".txt"; // extension txt
+	char* nom_fichier = (char*)calloc(strlen(debut_nom_fichier)+strlen(extension)+strlen(motif)+strlen(ctxt), sizeof(char)); // allocation memoire du nom du fichier
+	strcpy(nom_fichier,debut_nom_fichier); // ajout du debut du nom du fichier
+	strcat(nom_fichier,ctxt); // copie du contexte dans le nom du fichier
+	strcat(nom_fichier,motif); // copie du motif dans le nom du fichier
+	strcat(nom_fichier,extension); // ajout de l'extension dans le nom du fichier
+	ecriture = fopen(nom_fichier,"w+"); // ouverture en ecriture du fichier dans lequel on va ecrire les predictions et leur probabilite associee
 	if(score(contexte,motif_1)==score_max) { // cas ou le score du motif 1 est egal au score maximum
 		pile* listePredictions1 = remplirListePredictions2(contexte, motif_1); // on recupere la liste des predictions
 		printf("La liste des predictions est : \n");
@@ -291,8 +293,8 @@ void predictionpartielle(int contexte, char* motif) {
 			vider(&listePredictions3); // liberation de la memoire
 		}
 	}
-	/**************** Decoupage du motif en hospitalisations prises de maniere isolee ****************/
 	if(!correspondance){ // cas ou aucune correspondance n'a ete trouvee en scindant le motif en groupes de deux hospitalisations
+		/**************** Decoupage du motif en hospitalisations prises de maniere isolee ****************/
 		printf("Aucune correspondance n'a ete trouvee. Des predictions vont etre realisees sur chaque hospitalisation prise de maniere isolee.\n");
 		char* evenement_1 =(char*)calloc(2, sizeof(char)); // premiere hospitalisation
 		evenement_1 = decoupermotif(motif, 0, 1);
@@ -307,9 +309,16 @@ void predictionpartielle(int contexte, char* motif) {
 		pile* listePredictions = remplirListePredictions1(contexte,evenement_1, evenement_2, evenement_3); // on recupere la liste des predictions
 		printf("La liste des predictions est : \n");
 		visualiser(listePredictions);
+		if(estvide(&listePredictions)){ // cas ou aucune hospitalisation isolee du patient associee a une prediction n'a ete trouvee dans le contexte
+			fprintf(ecriture, "Aucune occurrence d'une hospitalisation isolee du patient dans ce contexte. Aucune prediction n'a pu etre realisee.\n");
+		}
 		while(!estvide(&listePredictions)){ // cas ou il reste encore des predictions possibles
 			int pred = depiler(&listePredictions); // on realise une prediction
 			fprintf(ecriture, "%i:%f\n", pred, calculerProba1(contexte,pred,evenement_1,evenement_2,evenement_3)); // on enregistre la prediction et sa probabilite dans le fichier predictions.txt 
 		}
+		fprintf(ecriture, "(prediction partielle hospitalisation par hospitalisation)\n"); // on precise qu'on a obtenu ces resultats en predisant sur chaque hospitalisation isolee du motif
+	}
+	else { 
+		fprintf(ecriture, "(prediction partielle par groupes de deux hospitalisations)\n"); // on precise qu'on a obtenu ces resultats en predisant sur les groupes de deux hospitalisations issus du motif
 	}
 }

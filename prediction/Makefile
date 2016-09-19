@@ -12,7 +12,7 @@ SRCS = patient.c contextemedical.c prediction.c predictionpartielle.c pile.c mai
 # ------------------------------------------------
 
 CC = gcc
-FLAGCOMP = -c -Wall -O3 -std=c99 -g #-pg
+FLAGCOMP = -c -Wall -ansi -pedantic -O3 -std=c99 -g #-pg
 FLAGLINK = -o #-pg -o
 LIB = -lm
 INCL = -I.
