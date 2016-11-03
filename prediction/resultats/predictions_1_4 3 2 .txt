@@ -1,0 +1,4 @@
+3:0.250000
+2:0.250000
+1:0.375000
+(prediction partielle hospitalisation par hospitalisation)

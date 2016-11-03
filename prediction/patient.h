@@ -22,7 +22,7 @@
 char* creermotif(int argc, char* argv[]);
 
 /**
- * \fn int* liremotif(char *s, const char ct, size_t* taille)
+ * \fn int* liremotif(char *motif, size_t* taille)
  * \brief Fonction permettant de construire le tableau d'hospitalisations correspondant au motif du patient
  * \param motif - le motif du patient sous forme de chaine de caracteres (chaque hospitalisation dans le motif est separee de la suivante par un espace)
  * \param taille - la taille du motif du patient 

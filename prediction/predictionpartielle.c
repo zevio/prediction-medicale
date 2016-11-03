@@ -58,23 +58,22 @@ pile* remplirListePredictions2(int contexte, int* motif){
 				int* motiftemp=liremotif(ligne, &taillecourant); // lecture du motif courant dans le contexte
 				int correspondance=0; // nombre de correspondances entre le motif courant dans le contexte et le motif du patient
 				int correspond=0; // le motif courant ne contient pas le motif du patient
-				int indice=-1;
+				int indice=0;
 				int prediction=-1; // hospitalisation predite
-				for(i=0;i<3;i++){
+				for(i=0;i<2;i++){
 					for(j=indice;j<taillecourant;j++){
-						if(motif[i]==motiftemp[j]){ 
+						if(motif[i]==motiftemp[j]){
 							correspondance++; // calcul des correspondances entre le motif courant et le motif du patient
-							indice=j;
+							indice=j+1;
 						}
 					}
 				}
-				if(correspondance==3){ // si le motif courant contient le motif du patient
+				if(correspondance==2){ // si le motif courant contient le motif du patient
 					correspond=1; // le motif courant correspond
 				}
-				if((correspond==1) && (indice!=-1) && (taillecourant>indice+1)){ // si le motif courant contient le motif du patient et qu'une prediction est possible (au moins une autre hospitalisation a eu lieu a la suite du motif du patient)
-					for(i=indice+1; i<taillecourant;i++){
+				if((correspond==1) && (indice!=-1) && (taillecourant>indice)){ // si le motif courant contient le motif du patient et qu'une prediction est possible (au moins une autre hospitalisation a eu lieu a la suite du motif du patient)
+					for(i=indice; i<taillecourant;i++){
 						prediction=motiftemp[i]; // on recupere chacune des hospitalisations ayant eu lieu a la suite de la correspondance avec le motif du patient dans le motif courant : chaque hospitalisation ayant eu lieu est une prediction
-						printf("Prediction : %d\n",prediction);
 						if(!existe(listePredictions,prediction)) { // si la prediction n'est pas deja dans la liste des predictions possibles
 							empiler(&listePredictions, prediction); // on l'ajoute
 						}
@@ -112,6 +111,7 @@ float calculerProba2(int contexte, int pred, int* motif, int amotif){
 	h[0]=amotif;
 	float score_4 = (float)score(contexte,h, &taille_hospitalisation); // score de l'hospitalisation restante
 	proba = (score_1+score_2)/(score_3+score_4); // probabilite de la prediction 
+	printf("Probabilite : %f\n", proba);
 	return proba; // probabilite de la prediction
 }
 
@@ -152,7 +152,6 @@ pile* remplirListePredictions1(int contexte,int* hospitalisation_1, int* hospita
 				if((correspond==1) && (indice!=-1) && (taillecourant>indice+1)){ // si le motif courant contient le motif du patient et qu'une prediction est possible (au moins une autre hospitalisation a eu lieu a la suite du motif du patient)
 					for(i=indice+1; i<taillecourant;i++){
 						prediction=motiftemp[i]; // on recupere chacune des hospitalisations ayant eu lieu a la suite de la correspondance avec le motif du patient dans le motif courant : chaque hospitalisation ayant eu lieu est une prediction
-						printf("Prediction : %d\n",prediction);
 						if(!existe(listePredictions,prediction)) { // si la prediction n'est pas deja dans la liste des predictions possibles
 							empiler(&listePredictions, prediction); // on l'ajoute
 						}
@@ -195,15 +194,31 @@ float calculerProba1(int contexte, int pred, int* hospitalisation_1, int* hospit
 
 void predictionpartielle_motif_3_hospitalisations(int contexte, int* motif){
 	/**************** Decoupage du motif en groupes de deux hospitalisations ****************/
+	printf("\n\nUne prediction partielle va etre realisee sur des groupes de deux hospitalisations.\n");
 	int* motif_1 = (int*)calloc(2, sizeof(int)); // premier groupe de 2 dans le motif : si motif = 1 2 3, on obtient 1 2
 	motif_1[0]=motif[0];
 	motif_1[1]=motif[1];
+	printf("Premier groupe de deux hospitalisations : ");
+	for(int z = 0; z<2; z++) {
+		printf("%d ", motif_1[z]);
+	}
+	printf("\n");
 	int* motif_2 = (int*)calloc(2, sizeof(int));  // second groupe de 2 dans le motif : si motif = 1 2 3, on obtient 2 3
-	motif_1[0]=motif[1];
-	motif_1[1]=motif[2];
+	motif_2[0]=motif[1];
+	motif_2[1]=motif[2];
+	printf("Deuxieme groupe de deux hospitalisations : ");
+	for(int z = 0; z<2; z++) {
+		printf("%d ", motif_2[z]);
+	}
+	printf("\n");
 	int* motif_3 = (int*)calloc(2, sizeof(int)); // troisieme groupe de 2 dans le motif : si motif = 1 2 3, on obtient 1 3
-	motif_1[0]=motif[0];
-	motif_1[1]=motif[2]; 
+	motif_3[0]=motif[0];
+	motif_3[1]=motif[2];
+	printf("Troisieme groupe de deux hospitalisations : ");
+	for(int z = 0; z<2; z++) {
+		printf("%d ", motif_3[z]);
+	}
+	printf("\n"); 
 	int score_max = scoremax(contexte, motif_1, motif_2, motif_3); // score maximum
 	int correspondance = 0; // verifie si une prediction est possible
 	size_t taille_motif = 3;
@@ -212,6 +227,7 @@ void predictionpartielle_motif_3_hospitalisations(int contexte, int* motif){
 	ecriture = fopen(nom_fichier,"w+"); // ouverture en ecriture du fichier dans lequel on va ecrire les predictions et leur probabilite associee
 	size_t taille_groupe_hospitalisations = 2;
 	if(score(contexte, motif_1, &taille_groupe_hospitalisations)==score_max) { // cas ou le score du motif 1 est egal au score maximum
+		printf("\nLe premier groupe d'hospitalisations est le plus recurrent dans la base.\n");
 		pile* listePredictions1 = remplirListePredictions2(contexte, motif_1); // on recupere la liste des predictions
 		printf("La liste des predictions est : \n");
 		visualiser(listePredictions1);
@@ -227,6 +243,7 @@ void predictionpartielle_motif_3_hospitalisations(int contexte, int* motif){
 		}
 	}
 	if(score(contexte, motif_2, &taille_groupe_hospitalisations)==score_max) { // cas ou le score du motif 2 est egal au score maximum
+		printf("\nLe deuxieme groupe d'hospitalisations est le plus recurrent dans la base.\n");
 		pile* listePredictions2 = remplirListePredictions2(contexte, motif_2); // on recupere la liste des predictions
 		printf("La liste des predictions est : \n");
 		visualiser(listePredictions2);	
@@ -242,6 +259,7 @@ void predictionpartielle_motif_3_hospitalisations(int contexte, int* motif){
 		}
 	}
 	if(score(contexte, motif_3, &taille_groupe_hospitalisations)==score_max) { // cas ou le score du motif 3 est egal au score maximum
+		printf("\nLe troisieme groupe d'hospitalisations est le plus recurrent dans la base.\n");
 		pile* listePredictions3 = remplirListePredictions2(contexte, motif_3); // on recupere la liste des predictions
 		printf("La liste des predictions est : \n");
 		visualiser(listePredictions3);
@@ -258,7 +276,8 @@ void predictionpartielle_motif_3_hospitalisations(int contexte, int* motif){
 	}
 	if(!correspondance){ // cas ou aucune correspondance n'a ete trouvee en scindant le motif en groupes de deux hospitalisations*/
 		/**************** Decoupage du motif en hospitalisations prises de maniere isolee ****************/
-		printf("Aucune correspondance n'a ete trouvee. Des predictions vont etre realisees sur chaque hospitalisation prise de maniere isolee.\n");
+		printf("\nUne prediction partielle va etre realisee sur chaque hospitalisation prise de maniere isolee.\n");
+		printf("********* Prediction partielle : \n");
 		int* hospitalisation_1 =(int*)calloc(1, sizeof(int)); // premiere hospitalisation
 		hospitalisation_1[0] = motif[0];
 		int* hospitalisation_2 =(int*)calloc(1, sizeof(int)); // seconde hospitalisation
@@ -269,6 +288,7 @@ void predictionpartielle_motif_3_hospitalisations(int contexte, int* motif){
 		printf("La liste des predictions est : \n");
 		visualiser(listePredictions);
 		if(estvide(&listePredictions)){ // cas ou aucune hospitalisation isolee du patient associee a une prediction n'a ete trouvee dans le contexte
+			printf("\nAucune occurrence d'une hospitalisation isolee du patient dans ce contexte. Aucune prediction n'a pu etre realisee.\n");
 			fprintf(ecriture, "Aucune occurrence d'une hospitalisation isolee du patient dans ce contexte. Aucune prediction n'a pu etre realisee.\n");
 		}
 		while(!estvide(&listePredictions)){ // cas ou il reste encore des predictions possibles
@@ -318,7 +338,6 @@ pile* remplirListePredictions(int contexte,int* hospitalisation_1, int* hospital
 				if((correspond==1) && (indice!=-1) && (taillecourant>indice+1)){ // si le motif courant contient le motif du patient et qu'une prediction est possible (au moins une autre hospitalisation a eu lieu a la suite du motif du patient)
 					for(i=indice+1; i<taillecourant;i++){
 						prediction=motiftemp[i]; // on recupere chacune des hospitalisations ayant eu lieu a la suite de la correspondance avec le motif du patient dans le motif courant : chaque hospitalisation ayant eu lieu est une prediction
-						printf("Prediction : %d\n",prediction);
 						if(!existe(listePredictions,prediction)) { // si la prediction n'est pas deja dans la liste des predictions possibles
 							empiler(&listePredictions, prediction); // on l'ajoute
 						}
@@ -351,13 +370,13 @@ float calculerProba(int contexte, int pred, int* hospitalisation_1, int* hospita
 	float score_3 = (float)score(contexte,hospitalisation_1, &taille_hospitalisation); // score de la premiere hospitalisation
 	float score_4 = (float)score(contexte,hospitalisation_2, &taille_hospitalisation); // score de la deuxieme hospitalisation
 	proba = (score_1+score_2)/(score_3+score_4); // probabilite de la prediction 
-	printf("Proba : %f\n", proba);
+	printf("Probabilite : %f\n", proba);
 	return proba; // probabilite de la prediction
 }
 
 void predictionpartielle_motif_2_hospitalisations(int contexte, int* motif) {
 	/**************** Decoupage du motif en hospitalisations prises de maniere isolee ****************/
-	printf("Aucune correspondance n'a ete trouvee. Des predictions vont etre realisees sur chaque hospitalisation prise de maniere isolee.\n");
+	printf("\nUne prediction partielle va etre realisee sur chaque hospitalisation prise de maniere isolee.\n");
 	int* hospitalisation_1 =(int*)calloc(1, sizeof(int)); // premiere hospitalisation
 	hospitalisation_1[0] = motif[0];
 	int* hospitalisation_2 =(int*)calloc(1, sizeof(int)); // seconde hospitalisation
@@ -367,9 +386,11 @@ void predictionpartielle_motif_2_hospitalisations(int contexte, int* motif) {
 	char* nom_fichier = nomfichierprediction(contexte, motif, &taille_motif);
 	ecriture = fopen(nom_fichier,"w+"); // ouverture en ecriture du fichier dans lequel on va ecrire les predictions et leur probabilite associee
 	pile* listePredictions = remplirListePredictions(contexte,hospitalisation_1, hospitalisation_2); // on recupere la liste des predictions
+	printf("********* Prediction partielle : \n");
 	printf("La liste des predictions est : \n");
 	visualiser(listePredictions);
-	if(estvide(&listePredictions)){ // cas ou aucune hospitalisation isolee du patient associee a une prediction n'a ete trouvee dans le contexte
+	if(estvide(&listePredictions)==1){ // cas ou aucune hospitalisation isolee du patient associee a une prediction n'a ete trouvee dans le contexte
+		printf("\nAucune occurrence d'une hospitalisation isolee du patient dans ce contexte. Aucune prediction n'a pu etre realisee.\n");
 		fprintf(ecriture, "Aucune occurrence d'une hospitalisation isolee du patient dans ce contexte. Aucune prediction n'a pu etre realisee.\n");
 	}
 	while(!estvide(&listePredictions)){ // cas ou il reste encore des predictions possibles

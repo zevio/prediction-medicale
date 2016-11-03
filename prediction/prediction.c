@@ -83,7 +83,7 @@ int score(int contexte, int* motif, size_t* taille){
 				int correspond=0; // le motif courant ne contient pas le motif dont on calcule le score
 				int correspondance=0; // nombre de correspondances entre le motif courant dans le contexte et le motif dont on calcule le score
 				int indice=0;
-				printf("Motif en cours : %s ", ligne);
+				//printf("Motif en cours : %s ", ligne);
 				for(i=0;i<*taille;i++) {
 					for(j=indice;j<taillecourant;j++) {
 						if(motif[i]==motiftemp[j]) {
@@ -93,13 +93,13 @@ int score(int contexte, int* motif, size_t* taille){
 						}
 					}
 				}
-				printf("\t nombre de correspondances : %i ", correspondance);
+				//printf("\t nombre de correspondances : %i ", correspondance);
 				if(correspondance==*taille){ // si le motif courant contient bien le motif dont on veut calculer le score
 					correspond=1; // le motif courant correspond
-					printf(" (le motif correspond)");
+					//printf(" (le motif correspond)");
 					score++; // le score augmente
 				}
-				printf("\n");
+				//printf("\n");
 			}
 		}
 	}
