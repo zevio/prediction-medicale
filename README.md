@@ -95,7 +95,7 @@ Il est possible que p1 ne présente pas de suite hospitalière. Ce cas de figure
 ### Documentation
 
 Le code a été documenté avec Doxygen. 
-La documentation au format pdf et HTML sont fournies.
+La documentation au format pdf est fournie.
 
 ### Utilisation
 
