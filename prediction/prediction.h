@@ -21,21 +21,23 @@
 char* conversionint(int i);
 
 /**
- * \fn int conversionmotif(char* motif)
- * \brief Fonction de conversion d'un motif en tableau d'entiers qu'il represente. Utile pour traiter les motifs de la base sequentielle 
- * \param motif - le motif qu'on souhaite convertir en tableau d'entiers
- * \return T - le tableau d'entiers represente par le motif
- */
-int* conversionmotif(char* motif);
-
-/**
  * \fn char* conversiontmotif(int* tmotif, int taillemotif)
- * \brief Fonction de conversion d'un tableau d'entiers en motif. Utile pour traiter les motifs de la base sequentielle
+ * \brief Fonction de conversion d'un tableau d'entiers (tableau d'hospitalisations) en chaine de caracteres (motif). Utile pour traiter les motifs de la base sequentielle
  * \param tmotif - le tableau d'entiers representant un motif
  * \param taillemotif - la taille du tableau d'entiers
  * \return motif - le motif sous forme de chaine de caracteres
  */
 char* conversiontmotif(int* tmotif, int taillemotif);
+
+/**
+ * \fn char* nomfichierprediction(int contexte, int* motif, size_t* taille)
+ * \brief Fonction permettant d'ecrire le nom du fichier qui contiendra les predictions associees a un motif dans un contexte medical precis
+ * \param contexte - le contexte medical dans lequel on se place
+ * \param motif - le motif du patient
+ * \param taille - la taille du motif du patient
+ * \return nom_fichier - le nom du fichier qui contiendra les predictions associees au motif dans le contexte medical
+ */
+char* nomfichierprediction(int contexte, int* motif, size_t* taille);
 
 /**
  * \fn int score(int contexte, char* motif)
@@ -44,7 +46,7 @@ char* conversiontmotif(int* tmotif, int taillemotif);
  * \param motif - le motif dont on calcule le score
  * \return score - le score du motif dans le contexte
  */
-int score(int contexte, char* motif);
+int score(int contexte, int* motif, size_t* taille);
 
 /**
  * \fn int prediction(int contexte, char* motif)
@@ -53,6 +55,6 @@ int score(int contexte, char* motif);
  * \param motif - le motif sur lequel on veut realiser la prediction
  * \return prediction_possible - 1 si au moins une prediction est possible sur le motif, 0 sinon
  */
-int prediction(int contexte, char* motif);
+int prediction(int contexte, int* motif, size_t* taille);
 
 #endif

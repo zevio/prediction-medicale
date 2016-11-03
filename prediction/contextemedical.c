@@ -16,7 +16,7 @@
 #include "contextemedical.h"
 
 
-int conversionchar(char a){
+int lirecontexte(char a){
 	char temp[2];
 	int aint; // entier correspondant au caractere 'a'
 	sprintf(temp,"%c",a); // formate le caractere 'a' en chaine de caracteres

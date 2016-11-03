@@ -13,11 +13,12 @@
 #define CONTEXTEMEDICAL_H_
 
 /**
- * \fn int conversionchar(char a)
- * \brief Fonction de conversion d'un caractere en l'entier qu'il represente. Utile pour convertir le contexte medical (ecrit sous forme de caractere dans la console) en entier
- * \param a - le caractere a convertir
+ * \fn int lirecontexte(char a)
+ * \brief Fonction permettant de convertir le contexte medical (ecrit sous forme de caractere dans la console) en l'entier qui lui est associe.
+ * Un contexte medical est cense etre represente par un entier.
+ * \param a - le contexte medical sous forme de caractere
  * \return aint - l'entier represente par a
  */
-int conversionchar(char a);
+int lirecontexte(char a);
 
 #endif

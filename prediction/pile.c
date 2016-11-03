@@ -19,8 +19,8 @@
 void empiler(pile **p, int valeur) {
 	pile *element = malloc(sizeof(pile)); // creation d'un element de pile
 	if(!element) {
-		fprintf(stderr, "Erreur lors de l'allocation memoire de la pile.\n");
-		exit(2);
+		fprintf(stderr, "Erreur lors de l'allocation memoire de l'element de la pile.\n");
+		exit(EXIT_FAILURE);
 	}
 	element->valeur = valeur; // valeur
 	element->prec = *p; // on empile
@@ -38,7 +38,7 @@ int depiler(pile **p) {
     valeur = (*p)->valeur; // on recupere la valeur soutiree de la pile
     free(*p); // liberation memoire
     *p = tmp; // le pointeur pointe sur le dernier élément
-    return valeur; // retourne la valeur soutirée de la pile
+    return valeur; // retourne la valeur soutiree de la pile
 }
 
 
@@ -63,7 +63,6 @@ void visualiser(pile *p) {
 int existe(pile *p, int valeur) {
 	int existe = 0;
     while(p) {
-        printf("%d\n",p->valeur);
         if(p->valeur == valeur) {
             existe = 1; // cas ou la valeur existe dans la pile
         }
