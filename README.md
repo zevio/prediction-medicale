@@ -7,6 +7,7 @@ Cette application en C a été créée dans le cadre d'un travail de recherche a
 
 ### Collaborateurs
 
+* Stella Zevio stella.zevio_at_etu.umontpellier.fr
 * Jessica Pinaire jessica.pinaire_at_chu-nimes.fr
 * Jérôme Azé jerome.aze_at_lirmm.fr
 * Sandra Bringay sandra.bringay_at_lirmm.fr
@@ -25,7 +26,7 @@ Un motif est associé à un patient. Il s'agit de la liste des hospitalisations 
 Les motifs sont représentés par une suite d'entiers. Chaque entier correspond à une hospitalisation.
 
 ```
-1 2
+1 2 10 3
 ```
 
 Ici, le patient a déjà subi deux hospitalisations. On cherche à déterminer, s'il était à nouveau hospitalisé, quelle serait la nature de cette nouvelle hospitalisation.
@@ -73,6 +74,7 @@ Voici un exemple de base séquentielle :
 1 4 2
 7 8 
 2
+10 2
 'c'
 1 8
 6
@@ -113,10 +115,20 @@ Pour exécuter, veuillez utiliser la commande suivante :
 
 ### Résultats
 
-Les résultats sont enregistrés dans le fichier predictions.txt du dossier resultats, sous la forme suivante :
+Pour chaque couple (contexte,motif), les résultats sont enregistrés dans le fichier prediction_contexte_motif.txt du dossier resultats, sous la forme suivante :
 
 ```
 prédiction:probabilité
 ```
 
 Chaque ligne du fichier correspond à une prédiction.
+
+Par exemple, la prédiction sur le contexte 1 du motif 3 4 10 sera enregistrée dans le fichier prediction_1_3 4 10 .txt, dans le dossier resultats.
+
+Lorsqu'une prédiction partielle a été réalisée, cela est précisé à la fin du fichier. Deux cas sont possibles :
+* (prediction partielle par groupes de deux hospitalisations)  
+   Lorsqu'au moins une correspondance avec un groupe de deux hospitalisations issues du motif a été trouvée
+* (prediction partielle hospitalisation par hospitalisation)  
+  Lorsque le cas précédent est faux, et qu'au moins une correspondance avec une hospitalisation issue du motif a été trouvée
+
+
