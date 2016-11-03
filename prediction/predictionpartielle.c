@@ -291,11 +291,13 @@ void predictionpartielle_motif_3_hospitalisations(int contexte, int* motif){
 			printf("\nAucune occurrence d'une hospitalisation isolee du patient dans ce contexte. Aucune prediction n'a pu etre realisee.\n");
 			fprintf(ecriture, "Aucune occurrence d'une hospitalisation isolee du patient dans ce contexte. Aucune prediction n'a pu etre realisee.\n");
 		}
-		while(!estvide(&listePredictions)){ // cas ou il reste encore des predictions possibles
-			int pred = depiler(&listePredictions); // on realise une prediction
-			fprintf(ecriture, "%i:%f\n", pred, calculerProba1(contexte,pred,hospitalisation_1,hospitalisation_2,hospitalisation_3)); // on enregistre la prediction et sa probabilite dans le fichier predictions.txt 
+		else {
+			while(!estvide(&listePredictions)) { // cas ou il reste encore des predictions possibles
+				int pred = depiler(&listePredictions); // on realise une prediction
+				fprintf(ecriture, "%i:%f\n", pred, calculerProba1(contexte,pred,hospitalisation_1,hospitalisation_2,hospitalisation_3)); // on enregistre la prediction et sa probabilite dans le fichier predictions.txt 
+			}
+			fprintf(ecriture, "(prediction partielle hospitalisation par hospitalisation)\n"); // on precise qu'on a obtenu ces resultats en predisant sur chaque hospitalisation isolee du motif
 		}
-		fprintf(ecriture, "(prediction partielle hospitalisation par hospitalisation)\n"); // on precise qu'on a obtenu ces resultats en predisant sur chaque hospitalisation isolee du motif
 	}
 	else { 
 		fprintf(ecriture, "(prediction partielle par groupes de deux hospitalisations)\n"); // on precise qu'on a obtenu ces resultats en predisant sur les groupes de deux hospitalisations issus du motif
@@ -389,15 +391,17 @@ void predictionpartielle_motif_2_hospitalisations(int contexte, int* motif) {
 	printf("********* Prediction partielle : \n");
 	printf("La liste des predictions est : \n");
 	visualiser(listePredictions);
-	if(estvide(&listePredictions)==1){ // cas ou aucune hospitalisation isolee du patient associee a une prediction n'a ete trouvee dans le contexte
+	if(estvide(&listePredictions)){ // cas ou aucune hospitalisation isolee du patient associee a une prediction n'a ete trouvee dans le contexte
 		printf("\nAucune occurrence d'une hospitalisation isolee du patient dans ce contexte. Aucune prediction n'a pu etre realisee.\n");
 		fprintf(ecriture, "Aucune occurrence d'une hospitalisation isolee du patient dans ce contexte. Aucune prediction n'a pu etre realisee.\n");
 	}
-	while(!estvide(&listePredictions)){ // cas ou il reste encore des predictions possibles
-		int pred = depiler(&listePredictions); // on realise une prediction
-		fprintf(ecriture, "%i:%f\n", pred, calculerProba(contexte,pred,hospitalisation_1,hospitalisation_2)); // on enregistre la prediction et sa probabilite dans le fichier predictions.txt 
+	else {
+		while(!estvide(&listePredictions)) { // cas ou il reste encore des predictions possibles
+			int pred = depiler(&listePredictions); // on realise une prediction
+			fprintf(ecriture, "%i:%f\n", pred, calculerProba(contexte,pred,hospitalisation_1,hospitalisation_2)); // on enregistre la prediction et sa probabilite dans le fichier predictions.txt 
+		}
+		fprintf(ecriture, "(prediction partielle hospitalisation par hospitalisation)\n"); // on precise qu'on a obtenu ces resultats en predisant sur chaque hospitalisation isolee du motif
 	}
-	fprintf(ecriture, "(prediction partielle hospitalisation par hospitalisation)\n"); // on precise qu'on a obtenu ces resultats en predisant sur chaque hospitalisation isolee du motif
 }
 
 

@@ -40,19 +40,21 @@ char* conversiontmotif(int* tmotif, int taillemotif);
 char* nomfichierprediction(int contexte, int* motif, size_t* taille);
 
 /**
- * \fn int score(int contexte, char* motif)
+ * \fn int score(int contexte, int* motif, size_t* taille)
  * \brief Fonction de calcul du score d'un motif dans un contexte. Le score correspond au nombre de motifs dans la base sequentielle qui correspondent avec le motif dont on veut calculer le score
  * \param contexte - le contexte medical considere
  * \param motif - le motif dont on calcule le score
+ * \param taille - la taille du motif dont on calcule le score
  * \return score - le score du motif dans le contexte
  */
 int score(int contexte, int* motif, size_t* taille);
 
 /**
- * \fn int prediction(int contexte, char* motif)
+ * \fn int prediction(int contexte, int* motif, size_t* taille)
  * \brief Fonction de prediction pour un motif dans un contexte. Les predictions sont stockees dans un fichier prediction.txt
  * \param contexte - le contexte medical considere
  * \param motif - le motif sur lequel on veut realiser la prediction
+ * \param taille - la taille du motif sur lequel on veut realiser la prediction
  * \return prediction_possible - 1 si au moins une prediction est possible sur le motif, 0 sinon
  */
 int prediction(int contexte, int* motif, size_t* taille);

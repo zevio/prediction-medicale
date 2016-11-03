@@ -1,2 +1,1 @@
 Aucune occurrence d'une hospitalisation isolee du patient dans ce contexte. Aucune prediction n'a pu etre realisee.
-(prediction partielle hospitalisation par hospitalisation)
