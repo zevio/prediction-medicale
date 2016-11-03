@@ -3,7 +3,7 @@ Prédiction des hospitalisations futures de patients atteints d'une pathologie d
 
 # Contexte
 
-Cette application en C a été créée dans le cadre d'un travail de recherche au LIRMM, au sein de l'équipe ADVANSE, en collaboration avec le CHU de Nîmes.
+Cette application en C a été créée dans le cadre d'un travail de recherche au LIRMM (Laboratoire d'Informatique, de Robotique et de Microélectronique de Montpellier), au sein de l'équipe ADVANSE, en collaboration avec le CHU de Nîmes.
 
 ### Collaborateurs
 
