@@ -53,7 +53,7 @@ Le contexte du patient doit donc être précisé.
 Chaque contexte est représenté par un entier.
 
 ```
-1 
+0 
 ```
 
 ### Base séquentielle
